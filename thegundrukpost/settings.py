@@ -37,9 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    # Third Parties
+    'allauth',
+    'allauth.account',
 
     # Local apps
     'accounts',
+    'posts',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +56,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # For all-auth
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'thegundrukpost.urls'
@@ -57,7 +66,7 @@ ROOT_URLCONF = 'thegundrukpost.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,6 +74,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # For all-auth
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -122,7 +134,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/' # Tells the app that static files are at static/ path of the site
+STATICFILES_DIRS = [ BASE_DIR / 'static'] # Path to our files 
+# for production
+STATIC_ROOT = BASE_DIR / "staticfiles" # create staticfiles folder when collectstatic is run 
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage' # engine used when used collectstatic
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -135,3 +152,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # For custom user model
 AUTH_USER_MODEL = 'accounts.User' # Point to the user model in the accounts app
+
+# all-auth configurations
+LOGIN_REDIRECT_URL = 'home'
+ACCOUNT_LOGOUT_REDIRECT = 'home'
+SITE_ID = 1
+
+"""The below configuration is default in django and it is not present here 
+but we can add it here and won't affect anything"""
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # Default one with django
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # send mails to console
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
