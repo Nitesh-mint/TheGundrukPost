@@ -42,6 +42,23 @@ INSTALLED_APPS = [
     # Third Parties
     'allauth',
     'allauth.account',
+    "crispy_forms",
+    "crispy_bootstrap5",
+
+    'wagtail.contrib.forms',
+    'wagtail.contrib.redirects',
+    'wagtail.embeds',
+    'wagtail.sites',
+    'wagtail.users',
+    'wagtail.snippets',
+    'wagtail.documents',
+    'wagtail.images',
+    'wagtail.search',
+    'wagtail.admin',
+    'wagtail',
+
+    'modelcluster',
+    'taggit',
 
     # Local apps
     'accounts',
@@ -59,6 +76,9 @@ MIDDLEWARE = [
 
     # For all-auth
     "allauth.account.middleware.AccountMiddleware",
+
+    # Wagtail
+    "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
 ROOT_URLCONF = 'thegundrukpost.urls'
@@ -172,3 +192,21 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =1
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  
+ACCOUNT_SESSION_REMEMBER = None #for remember me in LoginPage
+
+# Crispy Template packs
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+import os
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+WAGTAILADMIN_BASE_URL = 'http://thegundrukpost.com'
+WAGTAIL_SITE_NAME = 'The Gundruk Post'
